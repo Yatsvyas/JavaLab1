@@ -219,7 +219,7 @@ class MarkOutOfBoundsException extends RuntimeException {
 
 		} while (index < 1 || index > N);
 
-		return index--;
+		return --index;
 	}
 }
 
