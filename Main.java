@@ -26,17 +26,17 @@ class Student implements Pupil {
 
 	Student() {
 		Scanner input = new Scanner(System.in);
-		System.out.print("Введите фамилию ученика: ");
+		System.out.print("Enter the surname of the student:  ");
 		secondName = input.nextLine();
 	}
 
 	public void printSecondName() {
-		System.out.println("Фамилия студента: " + secondName);
+		System.out.println("Surname: " + secondName);
 	}
 
 	public void changeSecondName() {
 		Scanner input = new Scanner(System.in);
-		System.out.print("Введите новую фамилию: ");
+		System.out.print("Enter the new surname: ");
 		secondName = input.nextLine();
 
 		printSecondName();
@@ -45,9 +45,9 @@ class Student implements Pupil {
 	public void printSubjectsAndMarks() {
 
 		if (subjects.size() == 0) {
-			System.out.println("Список предметов и оценок пуст!");
+			System.out.println("List of subjects and marks is empty!");
 		} else {
-			System.out.println("Список предметов ученика " + secondName + ": ");
+			System.out.println("List of " + secondName + " subjects: ");
 			for (int i = 0; i < subjects.size(); i++)
 				System.out.println(subjects.get(i) + " " + marks.get(i));
 		}
@@ -57,13 +57,13 @@ class Student implements Pupil {
 		int N;
 
 		Scanner input = new Scanner(System.in);
-		System.out.print("Сколько предметов с оценками добавить: ");
+		System.out.print("How many subjects and marks to add: ");
 		N = input.nextInt();
 
 		for (int i = 0; i < N; i++) {
 			input = new Scanner(System.in);
 
-			System.out.print("Введите " + (i + 1) + " предмет: ");
+			System.out.print("Enter " + (i + 1) + " subject: ");
 			subjects.add(input.nextLine());
 
 			try {
@@ -74,7 +74,7 @@ class Student implements Pupil {
 				error.getSubject(subjects);
 			}
 
-			System.out.print("Введите оценку по этому предмету: ");
+			System.out.print("Enter of the mark of the subject: ");
 			marks.add(input.nextInt());
 		}
 
@@ -87,7 +87,7 @@ class Student implements Pupil {
 		int size = subjects.size();
 
 		try {
-			System.out.print("Номер предмета:");
+			System.out.print("Number of subject:");
 			index = input.nextInt();
 
 			if (index < 1 || index > size)
@@ -101,7 +101,7 @@ class Student implements Pupil {
 	}
 
 	public void getCountOfSubjects() {
-		System.out.println("Количество предметов: " + subjects.size());
+		System.out.println("Count of subjects: " + subjects.size());
 	}
 
 	public void getAverageMark() {
@@ -112,7 +112,7 @@ class Student implements Pupil {
 		}
 		averageMarks = (double) sum / marks.size();
 		averageMarks = (double) Math.round(averageMarks * 100) / 100;
-		System.out.println("Средняя оценка ученика " + secondName + " составляет: " + averageMarks);
+		System.out.println("Average mark of " + secondName + " is equal to: " + averageMarks);
 	}
 
 	private boolean checkSameSubjects() {
@@ -136,11 +136,11 @@ class SchoolBoy {
 		int N;
 		Scanner input = new Scanner(System.in);
 
-		System.out.print("Введите количество учеников: ");
+		System.out.print("Enter the count of student: ");
 		N = input.nextInt();
 
 		for (int i = 0; i < N; i++) {
-			System.out.println((i + 1) + " ученик.");
+			System.out.println((i + 1) + " student.");
 			listRegister.add(new Register());
 
 			listRegister.get(i).addSubjectsAndMarks();
@@ -151,7 +151,7 @@ class SchoolBoy {
 	}
 
 	void printAllSchoolBoys() {
-		System.out.println("Список всех учеников: ");
+		System.out.println("List of all students: ");
 		int size = listRegister.size();
 		for (int i = 0; i < size; i++) {
 			listRegister.get(i).printSecondName();
@@ -162,7 +162,7 @@ class SchoolBoy {
 		Scanner input = new Scanner(System.in);
 		int index;
 		printAllSchoolBoys();
-		System.out.print("Какого ученика выбираете: ");
+		System.out.print("Which student you need (enter the number): ");
 
 		try {
 			index = input.nextInt();
@@ -178,10 +178,10 @@ class SchoolBoy {
 
 	void printInfoAboutAllSchoolBoys() {
 		for (int i = 0; i < listRegister.size(); i++) {
-			System.out.println((i + 1) + " ученик:");
+			System.out.println((i + 1) + " student:");
 			listRegister.get(i).printSecondName();
 
-			System.out.println("Сведения о предметах и оценках:");
+			System.out.println("Info about subjects and marks:");
 			listRegister.get(i).printSubjectsAndMarks();
 		}
 	}
@@ -206,7 +206,7 @@ class Pupils {
 class MarkOutOfBoundsException extends RuntimeException {
 
 	void printMessage() {
-		System.out.print("Такого номера нет. Повторите ввод: ");
+		System.out.print("The number is not exist. Re-enter: ");
 	}
 
 	int getIndex(int N) {
@@ -226,8 +226,8 @@ class MarkOutOfBoundsException extends RuntimeException {
 class DuplicateSubjectException extends Exception {
 
 	void printMessage() {
-		System.out.println("Вы ввели два одинаковых предмета.");
-		System.out.println("Повторите ввод.");
+		System.out.println("You entered two identical subjects.");
+		System.out.println("Re-enter.");
 	}
 
 	void getSubject(ArrayList<String> subjects) {
@@ -235,7 +235,7 @@ class DuplicateSubjectException extends Exception {
 
 		do {
 			printMessage();
-			System.out.print("Введите предмет: ");
+			System.out.print("Enter the subject: ");
 			subjects.add(input.nextLine());
 
 		} while (checkSameSubjects(subjects));
