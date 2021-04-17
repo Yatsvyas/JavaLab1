@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.*;
 
 interface Pupil {
 
@@ -28,6 +29,21 @@ class Student implements Pupil {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter the surname of the student:  ");
 		secondName = input.nextLine();
+	}
+
+	Student(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws Exception {
+		String dataSubjects = new String(fileSubjects.readAllBytes());
+		String dataMarks = new String(fileMarks.readAllBytes());
+		String[] arraySubjects = dataSubjects.split("\r\n");
+		String[] arrayMarks = dataMarks.split("\r\n");
+		int arraySize = arraySubjects.length;
+		secondName = new String(fileSurname.readAllBytes());
+
+		for (int i = 0; i < arraySize; i++) {
+			subjects.add(arraySubjects[i]);
+			marks.add(Integer.parseInt(arrayMarks[i]));
+		}
+
 	}
 
 	public void printSecondName() {
@@ -127,6 +143,24 @@ class Student implements Pupil {
 		}
 		return false;
 	}
+	
+	public String getSecondName() {
+		return secondName;
+	}
+	
+	public String[] getArrayOfSubjects() {
+		String[] arrayOfSubjects = new String[subjects.size()];
+		subjects.toArray(arrayOfSubjects);
+		return arrayOfSubjects;
+	}
+	
+	public int[] getArrayOfMarks() {
+		int[] arrayOfMarks = new int[marks.size()];
+		for (int i : arrayOfMarks) {
+			
+		}
+	}
+	
 }
 
 class SchoolBoy {
@@ -142,7 +176,6 @@ class SchoolBoy {
 		for (int i = 0; i < N; i++) {
 			System.out.println((i + 1) + " student.");
 			listRegister.add(new Register());
-
 			listRegister.get(i).addSubjectsAndMarks();
 		}
 	}
@@ -199,6 +232,14 @@ class Pupils {
 
 	static void getAverageMark(Pupil student) {
 		student.getAverageMark();
+	}
+
+	static void outputPupil(Pupil student, OutputStream out) {
+	}
+
+	static Pupil inputPupil(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws Exception {
+		Pupil student = new Student(fileSurname, fileSubjects, fileMarks);
+		return student;
 	}
 
 }
@@ -258,10 +299,17 @@ class DuplicateSubjectException extends Exception {
 
 public class Main {
 
-	public static void main(String[] args) {
-		SchoolBoy list = new SchoolBoy();
-		Pupil student = list.choiceSchoolBoy();
-		Pupils.getAverageMark(student);
+	public static void main(String[] args) throws Exception {
+		String surname1 = "surname1.txt";
+		String subjects1 = "subjects1.txt";
+		String marks1 = "marks1.txt";
+		FileInputStream fileSurname = new FileInputStream(surname1);
+		FileInputStream fileSubjects = new FileInputStream(subjects1);
+		FileInputStream fileMarks = new FileInputStream(marks1);
+		Pupil student = Pupils.inputPupil(fileSurname, fileSubjects, fileMarks);
+		fileSurname.close();
+		fileSubjects.close();
+		fileMarks.close();
 		Pupils.printSubjectsAndMarks(student);
 	}
 

@@ -6,3 +6,5 @@
 /SchoolBoy$Register.class
 /SchoolBoy.class
 /Student.class
+*.txt
+.gitignore
