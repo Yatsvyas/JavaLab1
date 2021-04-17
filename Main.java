@@ -143,24 +143,27 @@ class Student implements Pupil {
 		}
 		return false;
 	}
-	
+
 	public String getSecondName() {
 		return secondName;
 	}
-	
+
 	public String[] getArrayOfSubjects() {
 		String[] arrayOfSubjects = new String[subjects.size()];
 		subjects.toArray(arrayOfSubjects);
 		return arrayOfSubjects;
 	}
-	
+
 	public int[] getArrayOfMarks() {
 		int[] arrayOfMarks = new int[marks.size()];
-		for (int i : arrayOfMarks) {
-			
+		
+		for (int i = 0; i < marks.size(); i++) {
+			arrayOfMarks[i] = marks.get(i);
 		}
+		
+		return arrayOfMarks;
 	}
-	
+
 }
 
 class SchoolBoy {
