@@ -17,6 +17,12 @@ interface Pupil {
 	void getCountOfSubjects();
 
 	void getAverageMark();
+	
+	public String getSecondName();
+	
+	public String[] getArrayOfSubjects();
+	
+	public int[] getArrayOfMarks();
 
 }
 
