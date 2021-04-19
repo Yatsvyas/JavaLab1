@@ -37,26 +37,18 @@ class Student implements Pupil {
 		secondName = input.nextLine();
 	}
 
-	Student(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws Exception {
-		FileInputStream fileSurname = new FileInputStream(nameFileSurname);
-		FileInputStream fileSubjects = new FileInputStream(nameFileSubjects);
-		FileInputStream fileMarks = new FileInputStream(nameFileMarks);
+	Student(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws FileNotFoundException, IOException {
 		String dataSubjects = new String(fileSubjects.readAllBytes());
 		String dataMarks = new String(fileMarks.readAllBytes());
 		String[] arraySubjects = dataSubjects.split("\r\n");
 		String[] arrayMarks = dataMarks.split("\r\n");
-		
-		int arraySize = arraySubjects.length;
+	
 		secondName = new String(fileSurname.readAllBytes());
 
-		for (int i = 0; i < arraySize; i++) {
+		for (int i = 0; i < arraySubjects.length; i++) {
 			subjects.add(arraySubjects[i]);
 			marks.add(Integer.parseInt(arrayMarks[i]));
 		}
-		
-		fileSurname.close();
-		fileSubjects.close();
-		fileMarks.close();
 	}
 
 	public void printSecondName() {
@@ -279,10 +271,15 @@ class Pupils {
 	}
 
 	static Pupil inputPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws Exception {
-		Pupil student = new Student(nameFileSurname, nameFileSubjects, nameFileMarks);
+		FileInputStream fileSurname = new FileInputStream(nameFileSurname);
+		FileInputStream fileSubjects = new FileInputStream(nameFileSubjects);
+		FileInputStream fileMarks = new FileInputStream(nameFileMarks);
+		Pupil student = new Student(fileSurname, fileSubjects, fileMarks);
+		fileSurname.close();
+		fileSubjects.close();
+		fileMarks.close();
 		return student;
 	}
-
 }
 
 class MarkOutOfBoundsException extends RuntimeException {
