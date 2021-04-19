@@ -22,7 +22,7 @@ interface Pupil {
 	
 	public String[] getArrayOfSubjects();
 	
-	public int[] getArrayOfMarks();
+	public String[] getArrayOfMarks();
 
 }
 
@@ -37,11 +37,15 @@ class Student implements Pupil {
 		secondName = input.nextLine();
 	}
 
-	Student(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws Exception {
+	Student(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws Exception {
+		FileInputStream fileSurname = new FileInputStream(nameFileSurname);
+		FileInputStream fileSubjects = new FileInputStream(nameFileSubjects);
+		FileInputStream fileMarks = new FileInputStream(nameFileMarks);
 		String dataSubjects = new String(fileSubjects.readAllBytes());
 		String dataMarks = new String(fileMarks.readAllBytes());
 		String[] arraySubjects = dataSubjects.split("\r\n");
 		String[] arrayMarks = dataMarks.split("\r\n");
+		
 		int arraySize = arraySubjects.length;
 		secondName = new String(fileSurname.readAllBytes());
 
@@ -49,7 +53,10 @@ class Student implements Pupil {
 			subjects.add(arraySubjects[i]);
 			marks.add(Integer.parseInt(arrayMarks[i]));
 		}
-
+		
+		fileSurname.close();
+		fileSubjects.close();
+		fileMarks.close();
 	}
 
 	public void printSecondName() {
@@ -160,11 +167,11 @@ class Student implements Pupil {
 		return arrayOfSubjects;
 	}
 
-	public int[] getArrayOfMarks() {
-		int[] arrayOfMarks = new int[marks.size()];
+	public String[] getArrayOfMarks() {
+		String[] arrayOfMarks = new String[marks.size()];
 		
 		for (int i = 0; i < marks.size(); i++) {
-			arrayOfMarks[i] = marks.get(i);
+			arrayOfMarks[i] = String.valueOf(marks.get(i));
 		}
 		
 		return arrayOfMarks;
@@ -243,11 +250,36 @@ class Pupils {
 		student.getAverageMark();
 	}
 
-	static void outputPupil(Pupil student, OutputStream out) {
+	static void outputPupil(Pupil student, String fileSurname, String fileSubjects, String fileMarks) throws Exception{
+		byte[] surnameBytes = student.getSecondName().getBytes();
+		byte[][] subjectsBytes = new byte[student.getArrayOfSubjects().length][];
+		byte[][] marksBytes = new byte[student.getArrayOfMarks().length][];
+		FileOutputStream surname = new FileOutputStream(fileSurname);
+		FileOutputStream subjects= new FileOutputStream(fileSubjects);
+		FileOutputStream marks = new FileOutputStream(fileMarks);
+		
+		for(int i = 0; i < student.getArrayOfSubjects().length; i++) {
+			subjectsBytes[i] = student.getArrayOfSubjects()[i].getBytes();
+			marksBytes[i] = student.getArrayOfMarks()[i].getBytes();
+		}
+		
+		surname.write(surnameBytes);
+		
+		for(int i = 0; i < student.getArrayOfSubjects().length; i++) {
+			subjects.write(subjectsBytes[i]);
+			subjects.write("\n".getBytes());
+			marks.write(marksBytes[i]);
+			marks.write("\n".getBytes());
+		}
+		
+		surname.close();
+		subjects.close();
+		marks.close();
+		
 	}
 
-	static Pupil inputPupil(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws Exception {
-		Pupil student = new Student(fileSurname, fileSubjects, fileMarks);
+	static Pupil inputPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws Exception {
+		Pupil student = new Student(nameFileSurname, nameFileSubjects, nameFileMarks);
 		return student;
 	}
 
@@ -309,17 +341,9 @@ class DuplicateSubjectException extends Exception {
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String surname1 = "surname1.txt";
-		String subjects1 = "subjects1.txt";
-		String marks1 = "marks1.txt";
-		FileInputStream fileSurname = new FileInputStream(surname1);
-		FileInputStream fileSubjects = new FileInputStream(subjects1);
-		FileInputStream fileMarks = new FileInputStream(marks1);
-		Pupil student = Pupils.inputPupil(fileSurname, fileSubjects, fileMarks);
-		fileSurname.close();
-		fileSubjects.close();
-		fileMarks.close();
+		Pupil student = Pupils.inputPupil("surname1.txt", "subjects1.txt", "marks1.txt");
 		Pupils.printSubjectsAndMarks(student);
+		Pupils.outputPupil(student, "surname.txt", "subjects.txt", "marks.txt");
 	}
 
 }
