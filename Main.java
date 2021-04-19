@@ -37,8 +37,7 @@ class Student implements Pupil {
 		secondName = input.nextLine();
 	}
 
-	Student(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks)
-			throws FileNotFoundException, IOException {
+	Student(InputStream fileSurname, InputStream fileSubjects, InputStream fileMarks) throws IOException {
 		String dataSubjects = new String(fileSubjects.readAllBytes());
 		String dataMarks = new String(fileMarks.readAllBytes());
 		String[] arraySubjects = dataSubjects.split("\r\n");
@@ -260,13 +259,14 @@ class Pupils {
 		student.getAverageMark();
 	}
 
-	static void outputPupil(Pupil student, String fileSurname, String fileSubjects, String fileMarks) throws FileNotFoundException, IOException {
+	static void outputPupil(Pupil student, String nameFileSurname, String nameFileSubjects, String nameFileMarks)
+			throws IOException {
 		byte[] surnameBytes = student.getSecondName().getBytes();
 		byte[][] subjectsBytes = new byte[student.getArrayOfSubjects().length][];
 		byte[][] marksBytes = new byte[student.getArrayOfMarks().length][];
-		FileOutputStream surname = new FileOutputStream(fileSurname);
-		FileOutputStream subjects = new FileOutputStream(fileSubjects);
-		FileOutputStream marks = new FileOutputStream(fileMarks);
+		FileOutputStream surname = new FileOutputStream(nameFileSurname);
+		FileOutputStream subjects = new FileOutputStream(nameFileSubjects);
+		FileOutputStream marks = new FileOutputStream(nameFileMarks);
 
 		for (int i = 0; i < student.getArrayOfSubjects().length; i++) {
 			subjectsBytes[i] = student.getArrayOfSubjects()[i].getBytes();
@@ -288,8 +288,7 @@ class Pupils {
 
 	}
 
-	static Pupil inputPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks)
-			throws FileNotFoundException, IOException {
+	static Pupil inputPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws IOException {
 		FileInputStream fileSurname = new FileInputStream(nameFileSurname);
 		FileInputStream fileSubjects = new FileInputStream(nameFileSubjects);
 		FileInputStream fileMarks = new FileInputStream(nameFileMarks);
@@ -300,8 +299,7 @@ class Pupils {
 		return student;
 	}
 
-	static Pupil readPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks)
-			throws FileNotFoundException, IOException {
+	static Pupil readPupil(String nameFileSurname, String nameFileSubjects, String nameFileMarks) throws IOException {
 		FileReader fileSurname = new FileReader(nameFileSurname);
 		FileReader fileSubjects = new FileReader(nameFileSubjects);
 		FileReader fileMarks = new FileReader(nameFileMarks);
@@ -312,6 +310,25 @@ class Pupils {
 		return student;
 	}
 
+	static void writePupil(Pupil student, String nameFileSurname, String nameFileSubjects, String nameFileMarks)
+			throws IOException {
+		FileWriter fileSurname = new FileWriter(nameFileSurname);
+		FileWriter fileSubjects = new FileWriter(nameFileSubjects);
+		FileWriter fileMarks = new FileWriter(nameFileMarks);
+
+		fileSurname.write(student.getSecondName());
+
+		for (int i = 0; i < student.getArrayOfSubjects().length; i++) {
+			fileSubjects.write(student.getArrayOfSubjects()[i]);
+			fileSubjects.write('\n');
+			fileMarks.write(student.getArrayOfMarks()[i]);
+			fileMarks.write('\n');
+		}
+
+		fileSurname.close();
+		fileSubjects.close();
+		fileMarks.close();
+	}
 }
 
 class MarkOutOfBoundsException extends RuntimeException {
@@ -369,10 +386,10 @@ class DuplicateSubjectException extends Exception {
 
 public class Main {
 
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException {
 		Pupil student = Pupils.readPupil("surname1.txt", "subjects1.txt", "marks1.txt");
 		Pupils.printSubjectsAndMarks(student);
-		//Pupils.outputPupil(student, "surname.txt", "subjects.txt", "marks.txt");
+		Pupils.writePupil(student, "surname.txt", "subjects.txt", "marks.txt");
 	}
 
 }
