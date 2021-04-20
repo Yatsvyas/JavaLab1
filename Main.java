@@ -26,7 +26,8 @@ interface Pupil {
 
 }
 
-class Student implements Pupil {
+class Student implements Pupil, Serializable {
+	private static final long serialVersionUID = 1L;
 	private String secondName;
 	private ArrayList<String> subjects = new ArrayList<String>();
 	private ArrayList<Integer> marks = new ArrayList<Integer>();
@@ -403,14 +404,32 @@ class DuplicateSubjectException extends Exception {
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		Pupil student = Pupils.readPupil("surname1.txt", "subjects1.txt", "marks1.txt");
 		Pupils.printSubjectsAndMarks(student);
 		Pupils.writePupil(student, "surname.txt", "subjects.txt", "marks.txt");
 
+		System.out.println("-------");
+		
 		SchoolBoy schoolBoy = new SchoolBoy();
 		schoolBoy.printInfoAboutAllSchoolBoys();
-
+		
+		System.out.println("-------");
+		
+		FileOutputStream saveFile = new FileOutputStream("savedObj");
+		ObjectOutputStream objectOutput = new ObjectOutputStream(saveFile);
+		
+		objectOutput.writeObject(student);
+		
+		saveFile.close();
+		objectOutput.close();
+		
+		FileInputStream loadFile = new FileInputStream("savedObj");
+		ObjectInputStream objectInput = new ObjectInputStream(loadFile);
+		
+		Student st = (Student) objectInput.readObject();
+		st.printSubjectsAndMarks();
+		
 	}
 
 }
