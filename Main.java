@@ -189,8 +189,8 @@ class Student implements Pupil, Serializable {
 
 }
 
-class SchoolBoy {
-
+class SchoolBoy implements Serializable{
+	private static final long serialVersionUID = 1L;
 	ArrayList<Student> listRegister = new ArrayList<Student>();
 
 	SchoolBoy() throws IOException {
@@ -428,7 +428,31 @@ public class Main {
 		ObjectInputStream objectInput = new ObjectInputStream(loadFile);
 		
 		Student st = (Student) objectInput.readObject();
+		
+		loadFile.close();
+		objectInput.close();
+		
 		st.printSubjectsAndMarks();
+		
+		System.out.println("-------");
+		
+		FileOutputStream saveFileSB = new FileOutputStream("savedObjSB");
+		ObjectOutputStream objectOutputSB = new ObjectOutputStream(saveFileSB);
+		
+		objectOutputSB.writeObject(schoolBoy);
+		
+		saveFileSB.close();
+		objectOutputSB.close();
+		
+		FileInputStream loadFileSB = new FileInputStream("savedObjSB");
+		ObjectInputStream objectInputSB = new ObjectInputStream(loadFileSB);
+		
+		SchoolBoy SB = (SchoolBoy) objectInputSB.readObject();
+		
+		loadFileSB.close();
+		objectInputSB.close();
+		
+		SB.printInfoAboutAllSchoolBoys();
 		
 	}
 
