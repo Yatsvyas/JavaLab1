@@ -189,20 +189,37 @@ class Student implements Pupil {
 }
 
 class SchoolBoy {
-	ArrayList<Register> listRegister = new ArrayList<Register>();
 
-	SchoolBoy() {
-		int N;
-		Scanner input = new Scanner(System.in);
+	ArrayList<Student> listRegister = new ArrayList<Student>();
 
-		System.out.print("Enter the count of student: ");
-		N = input.nextInt();
+	SchoolBoy() throws IOException {
+		String fileNameSurname;
+		String fileNameSubjects;
+		String fileNameMarks;
+		boolean flag = true;
+		int i = 1;
 
-		for (int i = 0; i < N; i++) {
-			System.out.println((i + 1) + " student.");
-			listRegister.add(new Register());
-			listRegister.get(i).addSubjectsAndMarks();
-		}
+		do {
+			fileNameSurname = "surname" + i + ".txt";
+			fileNameSubjects = "subjects" + i + ".txt";
+			fileNameMarks = "marks" + i + ".txt";
+			i++;
+
+			try {
+				FileReader fileSurname = new FileReader(fileNameSurname);
+				FileReader fileSubjects = new FileReader(fileNameSubjects);
+				FileReader fileMarks = new FileReader(fileNameMarks);
+
+				listRegister.add(new Student(fileSurname, fileSubjects, fileMarks));
+
+				fileSurname.close();
+				fileSubjects.close();
+				fileMarks.close();
+			} catch (FileNotFoundException err) {
+				System.out.println("Information was loaded");
+				flag = false;
+			}
+		} while (flag);
 	}
 
 	class Register extends Student {
@@ -216,7 +233,7 @@ class SchoolBoy {
 		}
 	}
 
-	Register choiceSchoolBoy() {
+	Student choiceSchoolBoy() {
 		Scanner input = new Scanner(System.in);
 		int index;
 		printAllSchoolBoys();
@@ -390,6 +407,10 @@ public class Main {
 		Pupil student = Pupils.readPupil("surname1.txt", "subjects1.txt", "marks1.txt");
 		Pupils.printSubjectsAndMarks(student);
 		Pupils.writePupil(student, "surname.txt", "subjects.txt", "marks.txt");
+
+		SchoolBoy schoolBoy = new SchoolBoy();
+		schoolBoy.printInfoAboutAllSchoolBoys();
+
 	}
 
 }
